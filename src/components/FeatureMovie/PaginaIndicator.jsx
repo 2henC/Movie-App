@@ -1,7 +1,22 @@
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 
 const PaginaIndicator = ({ movies, activeMovieId, setActiveMovieId }) => {
   // Sử dụng Distucturing Assignment để lấy ra movies từ props
+  // Thay vì props.movies, props.activeMovieId, props.setActiveMovieId
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentIndex = movies.findIndex(
+        (movie) => movie.id === activeMovieId,
+      );
+      const nextIndex = (currentIndex + 1) % movies.length; // 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3
+      setActiveMovieId(movies[nextIndex].id);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [movies, activeMovieId, setActiveMovieId]);
+
   return (
     <div className="absolute bottom-[10%] right-8">
       <ul className="flex gap-1">
