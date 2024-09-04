@@ -22,7 +22,7 @@ const FeatureMovie = () => {
   //   setMovies(data.results);
   // });
 
-  // Sử dụng useEffect để gọi API (Side Effect)
+  // Sử dụng useEffect để gọi API (tránh Side Effect ảnh hưởng đến performance)
   useEffect(() => {
     fetch("https://api.themoviedb.org/3/movie/popular", {
       method: "GET",

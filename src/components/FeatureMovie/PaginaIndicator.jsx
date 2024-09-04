@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const PaginaIndicator = ({ movies, activeMovieId, setActiveMovieId }) => {
   // Sử dụng Distucturing Assignment để lấy ra movies từ props
