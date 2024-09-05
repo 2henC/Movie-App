@@ -21,7 +21,7 @@ const CircularProgressBar = ({ size = 3, strokeWidth = 0.25, voteAverage }) => {
           cy={`${size / 2}vw`}
           stroke={
             voteAverage > 70 ? "green" : voteAverage > 40 ? "yellow" : "red"
-          } 
+          }
           strokeWidth={`${strokeWidth}vw`}
           fill="none"
           // transform="rotate(-90 25 25)" // xoay 90 độ ngược chiều kim đồng hồ quanh tâm (25, 25)
