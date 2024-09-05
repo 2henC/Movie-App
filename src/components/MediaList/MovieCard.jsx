@@ -15,7 +15,7 @@ const MovieCard = (props) => {
   } = props;
 
   return (
-    <div className="relative rounded-lg border-slate-800">
+    <div className="relative cursor-pointer rounded-lg border-slate-800">
       {media_type === "tv" && (
         <p className="absolute right-1 top-1 rounded bg-black px-2 text-white opacity-70 shadow-md">
           TV Show
