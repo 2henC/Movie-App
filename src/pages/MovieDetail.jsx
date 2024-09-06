@@ -5,6 +5,7 @@ import CircularProgressBar from "../components/CircularProgressBar";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { groupBy } from "lodash";
+import Loading from "../components/Loading";
 
 const MovieDetail = () => {
   const params = useParams();
@@ -12,8 +13,10 @@ const MovieDetail = () => {
   // Dùng Detrucuring Assignment để lấy id từ params
   const { id } = params;
   const [moiveInfo, setMovieInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(
       // Dùng ?append_to_response để lấy thêm thông tin release_dates và credits
       `https://api.themoviedb.org/3/movie/${id}?append_to_response=release_dates,credits`,
@@ -24,10 +27,17 @@ const MovieDetail = () => {
           Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZGU2YmJmMGYxNDFjZDZmNDA2NDc2YTM3YWFlMjdjZiIsIm5iZiI6MTcyNTE1OTk3Ny4yNDIwOTcsInN1YiI6IjY2ZDNkNjhhOWQ1OWViYzI5ZDQ1OGJiMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-U2h4X2-XJCODfKRpBoEpAJK8fCgPuaYoyjX47VtWFo`,
         },
       },
-    ).then(async (res) => {
-      const data = await res.json();
-      setMovieInfo(data);
-    });
+    )
+      .then(async (res) => {
+        const data = await res.json();
+        setMovieInfo(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [id]);
 
   const certification = (
@@ -41,6 +51,10 @@ const MovieDetail = () => {
     .map((crew) => ({ id: crew.id, name: crew.name, job: crew.job }));
 
   const groupCrews = groupBy(crews, "job");
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div>
