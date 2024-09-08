@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 const ActorList = ({ actors = [] }) => {
   const [isShowMore, setIsShowMore] = useState(false);
-  const currentActor = isShowMore ? actors.slice(0.32) : actors.slice(0, 4);
+  const currentActor = isShowMore ? actors.slice(0, 32) : actors.slice(0, 4);
 
   return (
     <div className="">

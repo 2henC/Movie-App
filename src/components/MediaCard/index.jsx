@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import CircularProgressBar from "../CircularProgressBar";
 import PropTypes from "prop-types";
 
-const MovieCard = (props) => {
+const MediaCard = (props) => {
   const {
     data: {
       id,
@@ -17,8 +17,8 @@ const MovieCard = (props) => {
   } = props;
 
   return (
-    <Link to={`/movie/${id}`}>
-      <div className="relative cursor-pointer rounded-lg border-slate-800">
+    <Link to={`/movie/${id}`} className="rounded-lg border-slate-800">
+      <div className="relative cursor-pointer">
         {media_type === "tv" && (
           <p className="absolute right-1 top-1 rounded bg-black px-2 text-white opacity-70 shadow-md">
             TV Show
@@ -39,8 +39,8 @@ const MovieCard = (props) => {
   );
 };
 
-MovieCard.propTypes = {
+MediaCard.propTypes = {
   data: PropTypes.object,
 };
 
-export default MovieCard;
+export default MediaCard;

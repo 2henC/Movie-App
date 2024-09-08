@@ -4,9 +4,12 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 // import { groupBy } from "lodash";
-import Loading from "../components/Loading";
-import Banner from "../components/MediaDetail/Banner";
-import ActorList from "../components/MediaDetail/ActorList";
+
+import Banner from "@components/MediaDetail/Banner";
+import ActorList from "@components/MediaDetail/ActorList";
+import RealatedMediaList from "@components/MediaDetail/RealatedMediaList";
+import Loading from "@libs//Loađing";
+import MovieInformation from "@components/MediaDetail/MovieInformation";
 
 const MovieDetail = () => {
   const params = useParams();
@@ -14,6 +17,8 @@ const MovieDetail = () => {
   // Dùng Detrucuring Assignment để lấy id từ params
   const { id } = params;
   const [moiveInfo, setMovieInfo] = useState({});
+  const [relativeMovie, setRelativeMovie] = useState([]);
+  const [isRelativeMovie, setIsRelativeMovie] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -41,6 +46,24 @@ const MovieDetail = () => {
       });
   }, [id]);
 
+  // Lấy các bộ phim liên quan/đề xuất
+  useEffect(() => {
+    setIsRelativeMovie(true);
+    fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations`, {
+      method: "GET",
+      headers: {
+        accept: "application/json'",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZGU2YmJmMGYxNDFjZDZmNDA2NDc2YTM3YWFlMjdjZiIsIm5iZiI6MTcyNTE1OTk3Ny4yNDIwOTcsInN1YiI6IjY2ZDNkNjhhOWQ1OWViYzI5ZDQ1OGJiMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-U2h4X2-XJCODfKRpBoEpAJK8fCgPuaYoyjX47VtWFo`,
+      },
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        setRelativeMovie(data.results.slice(0, 8) || []);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setIsRelativeMovie(false));
+  }, [id]);
+
   // const certification = (
   //   (moiveInfo.release_dates?.results || []).find(
   //     (result) => result.iso_3166_1 === "US",
@@ -53,7 +76,8 @@ const MovieDetail = () => {
 
   // const groupCrews = groupBy(crews, "job");
 
-  if (isLoading) {
+  // Kiểm tra loading. Đợi load hết dữ liệu mới hiện ra.
+  if (isLoading && isRelativeMovie) {
     return <Loading />;
   }
 
@@ -67,8 +91,11 @@ const MovieDetail = () => {
         <div className="mx-auto flex max-w-screen-lg gap-6 px-6 py-6">
           <div className="flex-[2]">
             <ActorList actors={moiveInfo.credits?.cast || []} />
+            <RealatedMediaList mediaList={relativeMovie} />
           </div>
-          <div className="mb-4 flex-1 text-[1.5vw] font-bold">Information</div>
+          <div className="mb-4 flex-1">
+            <MovieInformation movieInfo={moiveInfo} />
+          </div>
         </div>
       </div>
     </div>

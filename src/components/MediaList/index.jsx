@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import MovieCard from "./MovieCard";
 import PropTypes from "prop-types";
+import Loading from "@libs//Loađing";
+import MediaCard from "../MediaCard";
 
 const MeadiaList = ({ title, tabs }) => {
   const [meidaList, setMediaList] = useState([]);
   const [mediaTabId, setMediaTabId] = useState(tabs[0]?.id);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     const url = tabs.find((tab) => tab.id === mediaTabId).url;
     if (url) {
       fetch(url, {
@@ -15,13 +18,20 @@ const MeadiaList = ({ title, tabs }) => {
           accept: "application/json",
           Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZGU2YmJmMGYxNDFjZDZmNDA2NDc2YTM3YWFlMjdjZiIsIm5iZiI6MTcyNTE1OTk3Ny4yNDIwOTcsInN1YiI6IjY2ZDNkNjhhOWQ1OWViYzI5ZDQ1OGJiMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-U2h4X2-XJCODfKRpBoEpAJK8fCgPuaYoyjX47VtWFo`,
         },
-      }).then(async (res) => {
-        const data = await res.json();
-        const popularMovies = data.results.slice(0, 12);
-        setMediaList(popularMovies);
-      });
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          const popularMovies = data.results.slice(0, 12);
+          setMediaList(popularMovies);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => setIsLoading(false));
     }
   }, [mediaTabId, tabs]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="bg-black px-8 text-[1.2vw] text-white">
@@ -47,7 +57,7 @@ const MeadiaList = ({ title, tabs }) => {
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
         {meidaList.map((media) => (
-          <MovieCard key={media.id} data={media} />
+          <MediaCard key={media.id} data={media} />
         ))}
       </div>
     </div>
