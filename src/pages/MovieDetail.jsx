@@ -10,41 +10,47 @@ import ActorList from "@components/MediaDetail/ActorList";
 import RealatedMediaList from "@components/MediaDetail/RealatedMediaList";
 import Loading from "@libs//Loađing";
 import MovieInformation from "@components/MediaDetail/MovieInformation";
+import useFetch from "@hooks//useFetch";
 
 const MovieDetail = () => {
   const params = useParams();
   // parms là một object chứa các params trên URL
   // Dùng Detrucuring Assignment để lấy id từ params
   const { id } = params;
-  const [moiveInfo, setMovieInfo] = useState({});
+  // const [moiveInfo, setMovieInfo] = useState({});
   const [relativeMovie, setRelativeMovie] = useState([]);
   const [isRelativeMovie, setIsRelativeMovie] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(
-      // Dùng ?append_to_response để lấy thêm thông tin release_dates và credits
-      `https://api.themoviedb.org/3/movie/${id}?append_to_response=release_dates,credits`,
-      {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZGU2YmJmMGYxNDFjZDZmNDA2NDc2YTM3YWFlMjdjZiIsIm5iZiI6MTcyNTE1OTk3Ny4yNDIwOTcsInN1YiI6IjY2ZDNkNjhhOWQ1OWViYzI5ZDQ1OGJiMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-U2h4X2-XJCODfKRpBoEpAJK8fCgPuaYoyjX47VtWFo`,
-        },
-      },
-    )
-      .then(async (res) => {
-        const data = await res.json();
-        setMovieInfo(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [id]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   fetch(
+  //     // Dùng ?append_to_response để lấy thêm thông tin release_dates và credits
+  //     `https://api.themoviedb.org/3/movie/${id}?append_to_response=release_dates,credits`,
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         accept: "application/json",
+  //         Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+  //       },
+  //     },
+  //   )
+  //     .then(async (res) => {
+  //       const data = await res.json();
+  //       setMovieInfo(data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     })
+  //     .finally(() => {
+  //       setIsLoading(false);
+  //     });
+  // }, [id]);
+
+  // Sử dụng custom hook với url, method = "GET", headers mặc định trong useFetch
+  const { data: moiveInfo, isLoading } = useFetch({
+    url: `/movie/${id}?append_to_response=release_dates,credits`,
+  });
 
   // Lấy các bộ phim liên quan/đề xuất
   useEffect(() => {
@@ -53,7 +59,7 @@ const MovieDetail = () => {
       method: "GET",
       headers: {
         accept: "application/json'",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZGU2YmJmMGYxNDFjZDZmNDA2NDc2YTM3YWFlMjdjZiIsIm5iZiI6MTcyNTE1OTk3Ny4yNDIwOTcsInN1YiI6IjY2ZDNkNjhhOWQ1OWViYzI5ZDQ1OGJiMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-U2h4X2-XJCODfKRpBoEpAJK8fCgPuaYoyjX47VtWFo`,
+        Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
       },
     })
       .then(async (res) => {
