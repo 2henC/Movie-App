@@ -2,7 +2,7 @@
 // import { faPlay } from "@fortawesome/free-solid-svg-icons";
 // import CircularProgressBar from "../components/CircularProgressBar";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 // import { groupBy } from "lodash";
 
 import Banner from "@components/MediaDetail/Banner";
