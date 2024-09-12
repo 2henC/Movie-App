@@ -18,8 +18,8 @@ const MovieDetail = () => {
   // Dùng Detrucuring Assignment để lấy id từ params
   const { id } = params;
   // const [moiveInfo, setMovieInfo] = useState({});
-  const [relativeMovie, setRelativeMovie] = useState([]);
-  const [isRelativeMovie, setIsRelativeMovie] = useState(false);
+  // const [relativeMovie, setRelativeMovie] = useState([]);
+  // const [isRelativeMovie, setIsRelativeMovie] = useState(false);
   // const [isLoading, setIsLoading] = useState(false);
 
   // useEffect(() => {
@@ -53,22 +53,28 @@ const MovieDetail = () => {
   });
 
   // Lấy các bộ phim liên quan/đề xuất
-  useEffect(() => {
-    setIsRelativeMovie(true);
-    fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations`, {
-      method: "GET",
-      headers: {
-        accept: "application/json'",
-        Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-      },
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        setRelativeMovie(data.results.slice(0, 8) || []);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setIsRelativeMovie(false));
-  }, [id]);
+  // useEffect(() => {
+  //   setIsRelativeMovie(true);
+  //   fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations`, {
+  //     method: "GET",
+  //     headers: {
+  //       accept: "application/json'",
+  //       Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+  //     },
+  //   })
+  //     .then(async (res) => {
+  //       const data = await res.json();
+  //       setRelativeMovie(data.results.slice(0, 8) || []);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     .finally(() => setIsRelativeMovie(false));
+  // }, [id]);
+  const { data: relativeMovieResponse, isLoading: isRelativeMovie } = useFetch({
+    url: `/movie/${id}/recommendations`,
+  });
+
+  // data trả về là một Object. Cần chuyển sang Array để dùng map
+  const relativeMovie = relativeMovieResponse.results || [];
 
   // const certification = (
   //   (moiveInfo.release_dates?.results || []).find(
@@ -87,8 +93,6 @@ const MovieDetail = () => {
     return <Loading />;
   }
 
-  console.log({ moiveInfo });
-
   return (
     <div>
       {/* Truyền moiveInfo vào component Banner */}
@@ -97,7 +101,10 @@ const MovieDetail = () => {
         <div className="mx-auto flex max-w-screen-lg gap-6 px-6 py-6">
           <div className="flex-[2]">
             <ActorList actors={moiveInfo.credits?.cast || []} />
-            <RealatedMediaList mediaList={relativeMovie} />
+            <RealatedMediaList
+              mediaList={relativeMovie}
+              isLoading={isRelativeMovie}
+            />
           </div>
           <div className="mb-4 flex-1">
             <MovieInformation movieInfo={moiveInfo} />

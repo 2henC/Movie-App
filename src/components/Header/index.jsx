@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div>
-      {" "}
       <header className="flex h-14 items-center justify-between bg-slate-900 px-8 text-white">
         <div className="flex items-center gap-4">
           {/* Link tới trang chủ */}

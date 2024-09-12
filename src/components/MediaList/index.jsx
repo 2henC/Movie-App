@@ -1,37 +1,38 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
-import Loading from "@libs//Loađing";
 import MediaCard from "../MediaCard";
+import useFetch from "@hooks//useFetch";
 
 const MeadiaList = ({ title, tabs }) => {
-  const [meidaList, setMediaList] = useState([]);
+  // const [meidaList, setMediaList] = useState([]);
   const [mediaTabId, setMediaTabId] = useState(tabs[0]?.id);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const url = tabs.find((tab) => tab.id === mediaTabId).url;
-    if (url) {
-      fetch(url, {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-        },
-      })
-        .then(async (res) => {
-          const data = await res.json();
-          const popularMovies = data.results.slice(0, 12);
-          setMediaList(popularMovies);
-        })
-        .catch((err) => console.log(err))
-        .finally(() => setIsLoading(false));
-    }
-  }, [mediaTabId, tabs]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const url = tabs.find((tab) => tab.id === mediaTabId).url;
+  //   if (url) {
+  //     fetch(url, {
+  //       method: "GET",
+  //       headers: {
+  //         accept: "application/json",
+  //         Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+  //       },
+  //     })
+  //       .then(async (res) => {
+  //         const data = await res.json();
+  //         const popularMovies = data.results.slice(0, 12);
+  //         setMediaList(popularMovies);
+  //       })
+  //       .catch((err) => console.log(err))
+  //       .finally(() => setIsLoading(false));
+  //   }
+  // }, [mediaTabId, tabs]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const url = tabs.find((tab) => tab.id === mediaTabId).url;
+  const { data: popularMediaResponse } = useFetch({ url });
+  const meidaList = (popularMediaResponse.results || []).slice(0, 12);
+  console.log(meidaList);
 
   return (
     <div className="bg-black px-8 text-[1.2vw] text-white">
