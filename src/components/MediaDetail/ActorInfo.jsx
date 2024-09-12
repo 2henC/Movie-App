@@ -1,15 +1,18 @@
+import ImageComponent from "@libs//Image";
 import PropTypes from "prop-types";
 
 const ActorInfo = ({ actorCharacter, actorImg, actorName }) => {
   return (
     <div className="rounded-lg border border-slate-300 bg-slate-600 text-white shadow-md">
-      <img
-        className="rounded-lg"
+      <ImageComponent
+        className="w-full rounded-lg"
         src={
           actorImg
             ? `https://media.themoviedb.org/t/p/w138_and_h175_face${actorImg}`
             : "/img/ActorNoImage.svg"
         }
+        height={175}
+        width={138}
       />
       <div className="p-3">
         <p className="font-bold">{actorName}</p>

@@ -3,6 +3,7 @@ import CircularProgressBar from "@components/CircularProgressBar";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import { groupBy } from "lodash";
+import ImageComponent from "@libs//Image";
 
 const Banner = ({ mediaInfo }) => {
   // Lấy ra certification từ release_dates
@@ -22,17 +23,28 @@ const Banner = ({ mediaInfo }) => {
 
   return (
     <div className="relative overflow-hidden text-white shadow-sm shadow-slate-800">
-      <img
+      <ImageComponent
         className="absolute inset-0 w-full brightness-[0.2]"
         src={`https://image.tmdb.org/t/p/original${mediaInfo.backdrop_path}`}
       />
-
+      {/* <ImageComponent
+        src={`https://image.tmdb.org/t/p/original/${mediaInfo.poster_path}`}
+        className="w-full"
+        height={825}
+        width={1467}
+      /> */}
       {/* Realative để tăng z-index, không bị cùng z-index với absolute */}
       <div className="relative mx-auto flex max-w-screen-lg gap-6 px-6 py-8">
         <div className="flex-1">
-          <img
-            className=""
+          {/* <img
+            className="w-full"
             src={`https://image.tmdb.org/t/p/original/${mediaInfo.poster_path}`}
+          /> */}
+          <ImageComponent
+            src={`https://image.tmdb.org/t/p/original/${mediaInfo.poster_path}`}
+            className="w-full"
+            height={317}
+            width={476}
           />
         </div>
 
