@@ -18,7 +18,10 @@ const MediaCard = (props) => {
   } = props;
 
   return (
-    <Link to={`/movie/${id}`} className="rounded-lg border-slate-800">
+    <Link
+      to={media_type === "tv" ? `/tv/${id}` : `/movie/${id}`}
+      className="rounded-lg border-slate-800"
+    >
       <div className="relative cursor-pointer">
         {media_type === "tv" && (
           <p className="absolute right-1 top-1 rounded bg-black px-2 text-white opacity-70 shadow-md">

@@ -54,8 +54,6 @@ const FeatureMovie = () => {
     [moviesResponse],
   );
 
-  console.log({ movies });
-
   useEffect(() => {
     if (movies[0]?.id) setActiveMovieId(movies[0].id);
   }, [movies]);

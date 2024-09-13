@@ -32,7 +32,6 @@ const MeadiaList = ({ title, tabs }) => {
   const url = tabs.find((tab) => tab.id === mediaTabId).url;
   const { data: popularMediaResponse } = useFetch({ url });
   const meidaList = (popularMediaResponse.results || []).slice(0, 12);
-  console.log(meidaList);
 
   return (
     <div className="bg-black px-8 text-[1.2vw] text-white">

@@ -1,7 +1,7 @@
 import ImageComponent from "@libs//Image";
 import PropTypes from "prop-types";
 
-const ActorInfo = ({ actorCharacter, actorImg, actorName }) => {
+const ActorInfo = ({ actorCharacter, actorImg, actorName, episodeCount }) => {
   return (
     <div className="rounded-lg border border-slate-300 bg-slate-600 text-white shadow-md">
       <ImageComponent
@@ -17,7 +17,7 @@ const ActorInfo = ({ actorCharacter, actorImg, actorName }) => {
       <div className="p-3">
         <p className="font-bold">{actorName}</p>
         <p>{actorCharacter}</p>
-        <p>Number Episodes</p>
+        <p>{`${episodeCount} Episode${Number(episodeCount) > 1 ? "s" : ""}`}</p>
       </div>
     </div>
   );
@@ -28,6 +28,7 @@ ActorInfo.propTypes = {
   actorId: PropTypes.number,
   actorImg: PropTypes.string,
   actorName: PropTypes.string,
+  episodeCount: PropTypes.number,
 };
 
 export default ActorInfo;

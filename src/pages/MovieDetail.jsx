@@ -17,6 +17,7 @@ const MovieDetail = () => {
   // parms là một object chứa các params trên URL
   // Dùng Detrucuring Assignment để lấy id từ params
   const { id } = params;
+
   // const [moiveInfo, setMovieInfo] = useState({});
   // const [relativeMovie, setRelativeMovie] = useState([]);
   // const [isRelativeMovie, setIsRelativeMovie] = useState(false);
@@ -76,17 +77,15 @@ const MovieDetail = () => {
   // data trả về là một Object. Cần chuyển sang Array để dùng map
   const relativeMovie = relativeMovieResponse.results || [];
 
-  // const certification = (
-  //   (moiveInfo.release_dates?.results || []).find(
-  //     (result) => result.iso_3166_1 === "US",
-  //   )?.release_dates || []
-  // ).find((releaseDate) => releaseDate.certification)?.certification;
+  const certification = (
+    (moiveInfo.release_dates?.results || []).find(
+      (result) => result.iso_3166_1 === "US",
+    )?.release_dates || []
+  ).find((releaseDate) => releaseDate.certification)?.certification;
 
-  // const crews = (moiveInfo.credits?.crew || [])
-  //   .filter((crew) => ["Director", "Writer", "Screenplay"].includes(crew.job))
-  //   .map((crew) => ({ id: crew.id, name: crew.name, job: crew.job }));
-
-  // const groupCrews = groupBy(crews, "job");
+  const crews = (moiveInfo.credits?.crew || [])
+    .filter((crew) => ["Director", "Writer", "Screenplay"].includes(crew.job))
+    .map((crew) => ({ id: crew.id, name: crew.name, job: crew.job }));
 
   // Kiểm tra loading. Đợi load hết dữ liệu mới hiện ra.
   if (isLoading && isRelativeMovie) {
@@ -96,7 +95,17 @@ const MovieDetail = () => {
   return (
     <div>
       {/* Truyền moiveInfo vào component Banner */}
-      <Banner mediaInfo={moiveInfo} />
+      <Banner
+        title={moiveInfo.title}
+        releaseDate={moiveInfo.release_date}
+        overview={moiveInfo.overview}
+        voteAverage={moiveInfo.vote_average}
+        backdropPath={moiveInfo.backdrop_path}
+        posterPath={moiveInfo.poster_path}
+        genres={moiveInfo.genres}
+        certification={certification}
+        crews={crews}
+      />
       <div className="bg-black text-[1vw] text-white">
         <div className="mx-auto flex max-w-screen-lg gap-6 px-6 py-6">
           <div className="flex-[2]">

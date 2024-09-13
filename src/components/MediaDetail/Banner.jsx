@@ -5,18 +5,28 @@ import PropTypes from "prop-types";
 import { groupBy } from "lodash";
 import ImageComponent from "@libs//Image";
 
-const Banner = ({ mediaInfo }) => {
+const Banner = ({
+  releaseDate,
+  title,
+  backdropPath,
+  posterPath,
+  certification,
+  crews,
+  genres,
+  voteAverage,
+  overview,
+}) => {
   // Lấy ra certification từ release_dates
-  const certification = (
-    (mediaInfo.release_dates?.results || []).find(
-      (result) => result.iso_3166_1 === "US",
-    )?.release_dates || []
-  ).find((releaseDate) => releaseDate.certification)?.certification;
+  // const certification = (
+  //   (mediaInfo.release_dates?.results || []).find(
+  //     (result) => result.iso_3166_1 === "US",
+  //   )?.release_dates || []
+  // ).find((releaseDate) => releaseDate.certification)?.certification;
 
   // Lọc ra các crew có job là Director, Writer, Screenplay
-  const crews = (mediaInfo.credits?.crew || [])
-    .filter((crew) => ["Director", "Writer", "Screenplay"].includes(crew.job))
-    .map((crew) => ({ id: crew.id, name: crew.name, job: crew.job }));
+  // const crews = (mediaInfo.credits?.crew || [])
+  //   .filter((crew) => ["Director", "Writer", "Screenplay"].includes(crew.job))
+  //   .map((crew) => ({ id: crew.id, name: crew.name, job: crew.job }));
 
   // Gom nhóm các crew theo job
   const groupCrews = groupBy(crews, "job");
@@ -25,7 +35,7 @@ const Banner = ({ mediaInfo }) => {
     <div className="relative overflow-hidden text-white shadow-sm shadow-slate-800">
       <ImageComponent
         className="absolute inset-0 w-full brightness-[0.2]"
-        src={`https://image.tmdb.org/t/p/original${mediaInfo.backdrop_path}`}
+        src={`https://image.tmdb.org/t/p/original${backdropPath}`}
       />
       {/* <ImageComponent
         src={`https://image.tmdb.org/t/p/original/${mediaInfo.poster_path}`}
@@ -41,7 +51,7 @@ const Banner = ({ mediaInfo }) => {
             src={`https://image.tmdb.org/t/p/original/${mediaInfo.poster_path}`}
           /> */}
           <ImageComponent
-            src={`https://image.tmdb.org/t/p/original/${mediaInfo.poster_path}`}
+            src={`https://image.tmdb.org/t/p/original/${posterPath}`}
             className="w-full"
             height={317}
             width={476}
@@ -49,25 +59,23 @@ const Banner = ({ mediaInfo }) => {
         </div>
 
         <div className="flex-[2]">
-          <p className="mb-2 text-lg font-bold lg:text-2xl">
-            {mediaInfo.title}
-          </p>
+          <p className="mb-2 text-lg font-bold lg:text-2xl">{title}</p>
 
           <div className="flex items-center gap-4">
             <div className="mb-1 inline-block border border-gray-400 px-1 text-[1vw] text-gray-400">
               {certification}
             </div>
-            <p>{mediaInfo.release_date}</p>
+            <p>{releaseDate}</p>
             <p>
               {/* Chuyển từ một array thành một chuỗi bằng cách sử dụng .join(" ") */}
-              {(mediaInfo.genres || []).map((genre) => genre.name).join(", ")}
+              {(genres || []).map((genre) => genre.name).join(", ")}
             </p>
           </div>
 
           <div className="mt-4 flex items-center gap-[6vw]">
             <div className="flex items-center gap-2">
               <CircularProgressBar
-                voteAverage={mediaInfo.vote_average || 0}
+                voteAverage={voteAverage || 0}
                 size={3.5}
                 strokeWidth={0.4}
               />
@@ -81,7 +89,7 @@ const Banner = ({ mediaInfo }) => {
 
           <div className="mt-4">
             <p className="mb-2 text-[1.5vw] font-bold">Overview</p>
-            <p className="text-[1.1vw]">{mediaInfo.overview}</p>
+            <p className="text-[1.1vw]">{overview}</p>
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-2">
@@ -104,5 +112,14 @@ const Banner = ({ mediaInfo }) => {
 
 Banner.propTypes = {
   mediaInfo: PropTypes.object,
+  title: PropTypes.string,
+  releaseDate: PropTypes.string,
+  backdropPath: PropTypes.string,
+  posterPath: PropTypes.string,
+  certification: PropTypes.string,
+  crews: PropTypes.array,
+  genres: PropTypes.array,
+  voteAverage: PropTypes.number,
+  overview: PropTypes.string,
 };
 export default Banner;
